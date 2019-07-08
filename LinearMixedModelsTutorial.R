@@ -1,5 +1,14 @@
 # Tutorial, https://ourcodingclub.github.io/2017/03/15/mixed-models.html
 
+#Rule of thumb: You need 10 times more data than the parameters you are trying to estimate.
+
+#From Zuur et al. (2009):
+# 1. fit a full model (he even recommends “beyond optimal” i.e. more complex than you’d expect or want it to be)
+# 2. sort out the random effects structure (use REML likelihoods or REML AIC or BIC)
+# 3. sort out fixed effects structure (either use REML the F-statistic or the t-statistic or compare nested ML models - keep your random effects constant)
+# 4. once you arrive at the final model present it using REML estimation
+# 
+
 library(tidyverse)
 library(lme4)
 library(stargazer)
@@ -96,4 +105,20 @@ stargazer(second_lmer_CORRECT, type = "text",
 dwplot(second_lmer_CORRECT,
        vline = geom_vline(xintercept = 0, colour = "grey60", linetype = 2))
 #In this case, it is clear that bodyLength2 does not have an observably positive or negative effect.
+
+
+
+###### Statistics for fixed effect structures!
+#Typically, use a likelihood ratio test (anova or drop1)
+#The goal is to compare two models that differ by the fixed effect of interest.
+
+#Test two models, one with fixed effect(bodyLength), and one without:
+full.lmer <- lmer(testScore ~ bodyLength2 + (1|mountainRange) + (1|sample), 
+                  data = dragons, REML = FALSE)
+
+reduced.lmer <- lmer(testScore ~ 1 + (1|mountainRange) + (1|sample), 
+                     data = dragons, REML = FALSE)
+
+anova(reduced.lmer, full.lmer)
+
 
