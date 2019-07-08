@@ -1,7 +1,9 @@
+# Tutorial, https://ourcodingclub.github.io/2017/03/15/mixed-models.html
+
 library(tidyverse)
 library(lme4)
 library(stargazer)
-library(dotwhisker)
+library(dotwhisker) #https://cran.r-project.org/web/packages/dotwhisker/vignettes/dotwhisker-vignette.html
 library(broom)
 
 load("dragons.RData")
